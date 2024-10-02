@@ -1,4 +1,3 @@
-
 import 'package:hive/hive.dart';
 
 part 'model.g.dart';
@@ -19,7 +18,7 @@ class ToDo {
 
   @HiveField(4)
   final DateTime dueDate;
-  
+
   @HiveField(5)
   final DateTime? reminder;
 
@@ -30,6 +29,21 @@ class ToDo {
       required this.description,
       required this.dueDate,
       this.reminder});
+
+  ToDo copyWith(
+      {String? title,
+      String? description,
+      bool? completed,
+      Priority? priority,
+      DateTime? dueDate}) {
+    return ToDo(
+        title: title ?? this.title,
+        completed: completed ?? this.completed,
+        priority: priority ?? this.priority,
+        description: description ?? this.description,
+        dueDate: dueDate ?? this.dueDate,
+        reminder: reminder ?? this.reminder);
+  }
 }
 
 enum Priority { normal, important, veryImportant }

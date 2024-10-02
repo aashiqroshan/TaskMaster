@@ -13,8 +13,8 @@ class CreateTask extends ToDoEvent {
 }
 
 class DeleteTask extends ToDoEvent {
-  final ToDo taskId;
-  DeleteTask(this.taskId);
+  final ToDo task;
+  DeleteTask(this.task);
 }
 
 class EditTask extends ToDoEvent {
@@ -27,4 +27,10 @@ class SortTasksByPriority extends ToDoEvent {}
 class SearchTasks extends ToDoEvent {
   final String keyword;
   SearchTasks(this.keyword);
+}
+
+class UpdateTaskCompletion extends ToDoEvent {
+  final ToDo task;
+  final bool completed;
+  UpdateTaskCompletion(this.task,this.completed);
 }

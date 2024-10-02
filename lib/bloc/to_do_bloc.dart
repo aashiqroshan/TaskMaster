@@ -15,19 +15,22 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
     on<DeleteTask>(
       (event, emit) {
         tasks.removeWhere(
-          (task) => task.title == event.taskId,
+          (task) =>
+              task.title == event.task.title &&
+              task.dueDate == event.task.dueDate,
         );
         emit(ToDoLoaded(List.from(tasks)));
       },
     );
     on<EditTask>(
       (event, emit) {
-        final index = tasks.indexWhere(
-          (task) => task.title == event.task.title,
-        );
-        if (index != 1) {
+        final index =
+            tasks.indexWhere((task) => task.title == event.task.title);
+        if (index != -1) {
           tasks[index] = event.task;
           emit(ToDoLoaded(List.from(tasks)));
+        } else {
+          print('Not found so no editing');
         }
       },
     );
@@ -47,6 +50,20 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
                 task.description.contains(event.keyword))
             .toList();
         emit(ToDoLoaded(filteredtasks));
+      },
+    );
+    on<UpdateTaskCompletion>(
+      (event, emit) {
+        final updatedTasks = tasks.map(
+          (task) {
+            if (task.title == event.task.title &&
+                task.description == event.task.description) {
+              return task.copyWith(completed: event.completed);
+            }
+            return task;
+          },
+        ).toList();
+        emit(ToDoLoaded(updatedTasks));
       },
     );
   }
