@@ -18,12 +18,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => ToDoBloc(),
-    child: MaterialApp(
-      title: 'TaskMaster',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const Homescreen(),
-    ),);
+    return BlocProvider(
+      create: (context) => ToDoBloc(),
+      child: MaterialApp(
+        title: 'TaskMaster',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        home: const Homescreen(),
+      ),
+    );
   }
 }

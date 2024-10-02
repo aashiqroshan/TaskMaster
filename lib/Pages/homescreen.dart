@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:taskmaster/Pages/add_task.dart';
 import 'package:taskmaster/bloc/to_do_bloc.dart';
 import 'package:taskmaster/components/ToDo_widget.dart';
 
@@ -33,7 +34,16 @@ class Homescreen extends StatelessWidget {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {},child: const Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddTask(),
+              ));
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
