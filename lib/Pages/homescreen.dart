@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskmaster/Pages/add_task.dart';
@@ -14,32 +13,10 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   @override
-  void initState() {
-    AwesomeNotifications().isNotificationAllowed().then(
-      (isAllowed) {
-        if (!isAllowed) {
-          AwesomeNotifications().requestPermissionToSendNotifications();
-        }
-      },
-    );
-    super.initState();
-  }
-
-  triggerNOtification() {
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'basic channel',
-            title: 'simple notification',
-            body: 'simple button'));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TaskMaster'),
-        actions: [IconButton(onPressed: triggerNOtification, icon: const Icon(Icons.abc))],
       ),
       body: BlocBuilder<ToDoBloc, ToDoState>(
         builder: (context, state) {

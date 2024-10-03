@@ -66,9 +66,6 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
         emit(ToDoLoaded(List.from(tasks)));
       },
     );
-    on<ScheduleReminder>((event, emit) async {
-  await ScheduleReminder(event.reminderDateTime, event.title);
-});
-
+    
   }
 }

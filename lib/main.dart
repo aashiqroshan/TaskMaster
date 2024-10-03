@@ -18,15 +18,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
   await requestNotificationPermission();
-  await initNotifications();
-  await AwesomeNotifications().initialize(null,[
-    NotificationChannel(
-    channelKey: 'reminder_channel',
-    channelName: 'Reminder Notifications',
-    channelDescription: 'Notification channel for task reminders',
-    importance: NotificationImportance.Max,
-    channelShowBadge: true)
-  ] ,debug: true);
+  await AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+            channelKey: 'reminder_channel',
+            channelName: 'Reminder Notifications',
+            channelDescription: 'Notification channel for task reminders',
+            importance: NotificationImportance.Max,
+            channelShowBadge: true)
+      ],
+      debug: true);
   await Hive.initFlutter();
   Hive.registerAdapter(ToDoAdapter());
   runApp(const MyApp());
@@ -42,33 +44,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'TaskMaster',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
         home: const Homescreen(),
       ),
     );
   }
-}
-
-Future<void> initNotifications() async {
-  print('this is inside the initnotification');
-  const AndroidInitializationSettings initializationSettingsAndriod =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndriod);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      '2', 'aashiq channel',
-      description: 'this is used for task reminders',
-      importance: Importance.max);
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-  print('it should work here');
 }
 
 Future<void> requestNotificationPermission() async {

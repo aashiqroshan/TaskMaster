@@ -1,12 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/main.dart';
 import 'package:taskmaster/model.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AddTask extends StatefulWidget {
   AddTask({super.key});
@@ -53,71 +51,41 @@ class _AddTaskState extends State<AddTask> {
     }
   }
 
-  Future<void> scheduleReminder(DateTime reminderDateTime, String title) async {
-    // Convert the reminderDateTime to the local timezone
-    final localReminderDateTime =
-        tz.TZDateTime.from(reminderDateTime, tz.local);
-
+  Future<void> scheduleReminder(
+      DateTime reminderDateTime, String title, bool completed) async {
+    if (completed) return;
     try {
       print('the notification should start');
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        0, // Unique Notification ID
-        title,
-        'Reminder for your task: $title',
-        localReminderDateTime,
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            '2', // Ensure this matches the created channel ID
-            'aashiq channel', // Channel name
-            importance: Importance.max,
-            priority: Priority.high,
-            playSound: true,
-            icon: '@mipmap/ic_launcher', // Ensure the icon is correct
-          ),
-        ),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dateAndTime,
-      );
+      final tzDateTime = tz.TZDateTime.from(reminderDateTime, tz.local);
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+              channelKey: 'reminder_channel',
+              title: 'Reminder for your task: $title',
+              body: 'It\'s time to work on your task!',
+              notificationLayout: NotificationLayout.Default),
+          schedule: NotificationCalendar.fromDate(date: tzDateTime));
     } catch (e) {
       print("Error scheduling notification: $e");
     }
   }
 
-  Future<void> scheduleImmediateNotification(String title, String body) async {
-    // Create a unique notification ID
-    int notificationId =
-        DateTime.now().millisecondsSinceEpoch.remainder(100000);
-
-    // Set the scheduled time to 1 minute from now
-    final scheduledTime = DateTime.now().add(Duration(minutes: 1));
-
+  Future<void> schedulePreDueDateNOtification(
+      DateTime dueDate, String title, bool completed) async {
+    if (completed) return;
     try {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        notificationId,
-        title,
-        body,
-        tz.TZDateTime.from(scheduledTime, tz.local),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            '2', // Ensure this matches the created channel ID
-            'aashiq channel', // Channel name
-            importance: Importance.max,
-            priority: Priority.high,
-            playSound: true,
-            icon: '@mipmap/ic_launcher', // Ensure the icon is correct
-          ),
-        ),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dateAndTime,
-      );
-
-      print("Notification scheduled for $scheduledTime");
+      final tzDateTime = tz.TZDateTime.from(
+          dueDate.subtract(const Duration(days: 1)), tz.local);
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+              channelKey: 'reminder_channel',
+              title: 'Upcoming Task is Due: $title',
+              body: 'Your task is due tomorrow!',
+              notificationLayout: NotificationLayout.Default),
+          schedule: NotificationCalendar.fromDate(date: tzDateTime));
     } catch (e) {
-      print("Error scheduling notification: $e");
+      print('Error scheduling pre-due notifications: $e');
     }
   }
 
@@ -211,20 +179,12 @@ class _AddTaskState extends State<AddTask> {
                     context.read<ToDoBloc>().add(CreateTask(todo));
                     if (seletedRemainder != null) {
                       if (seletedRemainder != null) {
-                        context.read<ToDoBloc>().add(
-                            ScheduleReminder(seletedRemainder!, todo.title));
+                        scheduleReminder(seletedRemainder!, todo.title,todo.completed);
                       }
                     }
                     Navigator.pop(context);
                   },
                   child: const Text('Add Task')),
-              ElevatedButton(
-                onPressed: () {
-                  scheduleImmediateNotification(
-                      "Test Notification", "This is a test notification.");
-                },
-                child: const Text('Show Notification'),
-              ),
             ],
           ),
         ),
