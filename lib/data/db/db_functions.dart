@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/models/model.dart';
+import 'package:taskmaster/domain/bloc/to_do_bloc.dart';
+import 'package:taskmaster/data/models/model.dart';
 
 class TaskDb {
   final Box<ToDo> box = Hive.box<ToDo>('Box');

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:taskmaster/Pages/homescreen.dart';
-import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/db/db_functions.dart';
+import 'package:taskmaster/presentation/Pages/homescreen.dart';
+import 'package:taskmaster/domain/bloc/to_do_bloc.dart';
+import 'package:taskmaster/data/db/db_functions.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:taskmaster/models/model.dart';
+import 'package:taskmaster/data/models/model.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taskmaster/Pages/add_task.dart';
-import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/components/ToDo_widget.dart';
-import 'package:taskmaster/db/db_functions.dart';
-import 'package:taskmaster/models/model.dart';
+import 'package:taskmaster/presentation/Pages/add_task.dart';
+import 'package:taskmaster/domain/bloc/to_do_bloc.dart';
+import 'package:taskmaster/presentation/components/ToDo_widget.dart';
+import 'package:taskmaster/data/db/db_functions.dart';
+import 'package:taskmaster/data/models/model.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});

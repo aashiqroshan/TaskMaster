@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:taskmaster/db/db_functions.dart';
-import 'package:taskmaster/models/model.dart';
+import 'package:taskmaster/data/db/db_functions.dart';
+import 'package:taskmaster/data/models/model.dart';
 
 part 'to_do_event.dart';
 part 'to_do_state.dart';

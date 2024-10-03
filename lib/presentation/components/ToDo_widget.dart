@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:taskmaster/Pages/edit_task.dart';
-import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/models/model.dart';
+import 'package:taskmaster/presentation/Pages/edit_task.dart';
+import 'package:taskmaster/domain/bloc/to_do_bloc.dart';
+import 'package:taskmaster/data/models/model.dart';
 
 class TodoWidget extends StatelessWidget {
   final ToDo task;
