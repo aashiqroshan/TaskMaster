@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:taskmaster/model.dart';
+import 'package:taskmaster/models/model.dart';
 
 part 'to_do_event.dart';
 part 'to_do_state.dart';

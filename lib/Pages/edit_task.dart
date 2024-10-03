@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:taskmaster/model.dart';
+import 'package:taskmaster/models/model.dart';
 
 class EditTaskScreen extends StatefulWidget {
   final ToDo task;
