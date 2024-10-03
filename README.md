@@ -1,9 +1,6 @@
 <<<<<<< HEAD
 # TaskMaster
 =======
-# taskmaster
-
-# TaskMaster
 
 A Flutter-based task management application that allows users to create, read, update, and delete tasks. The app utilizes Hive for local storage, Bloc for state management, and follows Clean Architecture principles for better code organization and maintainability.
 
