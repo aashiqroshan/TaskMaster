@@ -42,5 +42,7 @@ class ScheduleReminder extends ToDoEvent {
   final DateTime reminderDateTime;
   final String title;
 
-  ScheduleReminder(this.reminderDateTime,this.title);
+  ScheduleReminder(this.reminderDateTime, this.title);
 }
+
+class LoadTasks extends ToDoEvent {}

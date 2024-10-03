@@ -1,32 +1,38 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:taskmaster/db/db_functions.dart';
 import 'package:taskmaster/models/model.dart';
 
 part 'to_do_event.dart';
 part 'to_do_state.dart';
 
 class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
+  final TaskDb taskDb;
   List<ToDo> tasks = [];
-  ToDoBloc() : super(ToDoInitial()) {
+  ToDoBloc(this.taskDb) : super(ToDoInitial()) {
+    tasks = taskDb.getTasks();
+    emit(ToDoLoaded(List.from(tasks)));
+
     on<CreateTask>((event, emit) {
+      taskDb.addTask(event.task);
       tasks.add(event.task);
       emit(ToDoLoaded(List.from(tasks)));
     });
     on<DeleteTask>(
       (event, emit) {
-        tasks.removeWhere(
-          (task) =>
-              task.title == event.task.title &&
-              task.dueDate == event.task.dueDate,
-        );
-        emit(ToDoLoaded(List.from(tasks)));
+        final index = tasks.indexOf(event.task);
+        if (index != -1) {
+          taskDb.deleteTask(index);
+          tasks.removeAt(index);
+          emit(ToDoLoaded(List.from(tasks)));
+        }
       },
     );
     on<EditTask>(
       (event, emit) {
-        final index =
-            tasks.indexWhere((task) => task.title == event.task.title);
+        final index = tasks.indexOf(event.task);
         if (index != -1) {
+          taskDb.updateTask(index, event.task);
           tasks[index] = event.task;
           emit(ToDoLoaded(List.from(tasks)));
         } else {
@@ -66,6 +72,13 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
         emit(ToDoLoaded(List.from(tasks)));
       },
     );
-    
+
+    on<LoadTasks>(
+      (event, emit) async {
+        emit(ToDoLoading());
+        tasks = taskDb.getTasks();
+        emit(ToDoLoaded(List.from(tasks)));
+      },
+    );
   }
 }

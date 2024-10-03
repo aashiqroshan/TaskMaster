@@ -100,92 +100,96 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(label: Text('Title')),
-              ),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(label: Text('Description')),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              DropdownButtonFormField<Prioritys>(
-                decoration: const InputDecoration(labelText: 'Priority Level'),
-                value: selectedPriority,
-                items: dropdownitems,
-                onChanged: (value) => setState(() {
-                  selectedPriority = value!;
-                }),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        selectedDueDate == null
-                            ? 'Select Due Date'
-                            // :
-                            : 'Due Date: ${DateFormat('dd/MM/yyyy').format(selectedDueDate!)}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton.icon(
-                          onPressed: () => selectDueDate(context),
-                          icon: const Icon(Icons.calendar_month),
-                          label: const Text('Pick Date')),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        seletedRemainder != null
-                            ? 'Reminding on : ${DateFormat('dd/MM/yyyy HH:mm').format(seletedRemainder!)}'
-                            : 'Select Reminder  :',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      ElevatedButton.icon(
-                          onPressed: () => _selectRemainder(context),
-                          icon: const Icon(Icons.alarm_add),
-                          label: const Text('Set remainder')),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    final todo = ToDo(
-                        title: titleController.text,
-                        completed: false,
-                        priority: selectedPriority,
-                        description: descriptionController.text,
-                        dueDate: selectedDueDate!,
-                        reminder: seletedRemainder);
-                    context.read<ToDoBloc>().add(CreateTask(todo));
-                    if (seletedRemainder != null) {
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(label: Text('Title')),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(label: Text('Description')),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                DropdownButtonFormField<Prioritys>(
+                  decoration:
+                      const InputDecoration(labelText: 'Priority Level'),
+                  value: selectedPriority,
+                  items: dropdownitems,
+                  onChanged: (value) => setState(() {
+                    selectedPriority = value!;
+                  }),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          selectedDueDate == null
+                              ? 'Select Due Date'
+                              // :
+                              : 'Due Date: ${DateFormat('dd/MM/yyyy').format(selectedDueDate!)}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () => selectDueDate(context),
+                            icon: const Icon(Icons.calendar_month),
+                            label: const Text('Pick Date')),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          seletedRemainder != null
+                              ? 'Reminding on : ${DateFormat('dd/MM/yyyy HH:mm').format(seletedRemainder!)}'
+                              : 'Select Reminder  :',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        ElevatedButton.icon(
+                            onPressed: () => _selectRemainder(context),
+                            icon: const Icon(Icons.alarm_add),
+                            label: const Text('Set remainder')),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      final todo = ToDo(
+                          title: titleController.text,
+                          completed: false,
+                          priority: selectedPriority,
+                          description: descriptionController.text,
+                          dueDate: selectedDueDate!,
+                          reminder: seletedRemainder);
+                      context.read<ToDoBloc>().add(CreateTask(todo));
                       if (seletedRemainder != null) {
-                        scheduleReminder(seletedRemainder!, todo.title,todo.completed);
+                        if (seletedRemainder != null) {
+                          scheduleReminder(
+                              seletedRemainder!, todo.title, todo.completed);
+                        }
                       }
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Add Task')),
-            ],
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Add Task')),
+              ],
+            ),
           ),
         ),
       ),

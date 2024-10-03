@@ -47,3 +47,20 @@ class ToDo {
 }
 
 enum Prioritys { normal, important, veryImportant }
+
+class PrioritysAdapter extends TypeAdapter<Prioritys> {
+  @override
+  final int typeId = 2; // Unique ID for the adapter
+
+  @override
+  Prioritys read(BinaryReader reader) {
+    // Read an integer and convert it back to the enum
+    return Prioritys.values[reader.readInt()];
+  }
+
+  @override
+  void write(BinaryWriter writer, Prioritys obj) {
+    // Write the index of the enum
+    writer.writeInt(obj.index);
+  }
+}

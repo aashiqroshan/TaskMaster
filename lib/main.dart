@@ -4,20 +4,20 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:taskmaster/Pages/homescreen.dart';
 import 'package:taskmaster/bloc/to_do_bloc.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:taskmaster/db/db_functions.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:taskmaster/models/model.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
   await requestNotificationPermission();
+  await Hive.initFlutter();
+  Hive.registerAdapter(ToDoAdapter());
+  Hive.registerAdapter(PrioritysAdapter());
+  await Hive.openBox<ToDo>('Box');
   await AwesomeNotifications().initialize(
       null,
       [
@@ -29,18 +29,17 @@ void main() async {
             channelShowBadge: true)
       ],
       debug: true);
-  await Hive.initFlutter();
-  Hive.registerAdapter(ToDoAdapter());
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final taskDb = TaskDb();
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ToDoBloc(),
+      create: (context) => ToDoBloc(taskDb),
       child: MaterialApp(
         title: 'TaskMaster',
         debugShowCheckedModeBanner: false,

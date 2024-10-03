@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskmaster/Pages/add_task.dart';
 import 'package:taskmaster/bloc/to_do_bloc.dart';
 import 'package:taskmaster/components/ToDo_widget.dart';
+import 'package:taskmaster/db/db_functions.dart';
 import 'package:taskmaster/models/model.dart';
 
 class Homescreen extends StatefulWidget {
@@ -30,6 +31,17 @@ class _HomescreenState extends State<Homescreen> {
         break;
     }
     return tasks;
+  }
+
+  void loadTasks() {
+    BlocProvider.of<ToDoBloc>(context).add(LoadTasks());
+  }
+
+  final taskDb = TaskDb();
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
