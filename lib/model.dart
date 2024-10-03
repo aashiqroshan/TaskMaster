@@ -11,7 +11,7 @@ class ToDo {
   final bool completed;
 
   @HiveField(2)
-  final Priority priority;
+  final Prioritys priority;
 
   @HiveField(3)
   final String description;
@@ -34,7 +34,7 @@ class ToDo {
       {String? title,
       String? description,
       bool? completed,
-      Priority? priority,
+      Prioritys? priority,
       DateTime? dueDate}) {
     return ToDo(
         title: title ?? this.title,
@@ -46,4 +46,4 @@ class ToDo {
   }
 }
 
-enum Priority { normal, important, veryImportant }
+enum Prioritys { normal, important, veryImportant }

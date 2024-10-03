@@ -15,8 +15,9 @@ class EditTaskScreen extends StatefulWidget {
 class _EditTaskScreenState extends State<EditTaskScreen> {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
-  late Priority selectedPriority;
+  late Prioritys selectedPriority;
   late DateTime selectedDueDate;
+  DateTime? selectRemainder;
 
   @override
   void initState() {
@@ -25,6 +26,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         TextEditingController(text: widget.task.description);
     selectedPriority = widget.task.priority;
     selectedDueDate = widget.task.dueDate;
+    selectRemainder = widget.task.reminder;
     super.initState();
   }
 
@@ -38,6 +40,24 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       setState(() {
         selectedDueDate = picked;
       });
+    }
+  }
+
+  Future<void> _selectRemainder(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100),
+        initialDate: selectedDueDate);
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime =
+          await showTimePicker(context: context, initialTime: TimeOfDay.now());
+      if (pickedTime != null) {
+        setState(() {
+          selectRemainder = DateTime(pickedDate.year, pickedDate.month,
+              pickedDate.day, pickedTime.hour, pickedTime.minute);
+        });
+      }
     }
   }
 
@@ -60,16 +80,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               controller: descriptionController,
               decoration: const InputDecoration(labelText: 'Description'),
             ),
-            DropdownButton<Priority>(
+            DropdownButton<Prioritys>(
               value: selectedPriority,
-              items: Priority.values.map(
-                (Priority priority) {
-                  return DropdownMenuItem<Priority>(
+              items: Prioritys.values.map(
+                (Prioritys priority) {
+                  return DropdownMenuItem<Prioritys>(
                       value: priority,
                       child: Text(priority.toString().split('.').last));
                 },
               ).toList(),
-              onChanged: (Priority? newValue) {
+              onChanged: (Prioritys? newValue) {
                 setState(() {
                   selectedPriority = newValue!;
                 });
@@ -93,6 +113,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     icon: const Icon(Icons.calendar_today))
               ],
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              selectRemainder != null
+                  ? 'Reminding on : ${DateFormat('dd/MM/yyyy HH:mm').format(selectRemainder!)}'
+                  : 'Select Reminder  :',
+              style: const TextStyle(fontSize: 16),
+            ),
+            ElevatedButton.icon(
+                onPressed: () => _selectRemainder(context),
+                icon: const Icon(Icons.alarm_add),
+                label: const Text('Set remainder')),
             const SizedBox(
               height: 20,
             ),

@@ -54,17 +54,21 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoState> {
     );
     on<UpdateTaskCompletion>(
       (event, emit) {
-        final updatedTasks = tasks.map(
-          (task) {
-            if (task.title == event.task.title &&
-                task.description == event.task.description) {
-              return task.copyWith(completed: event.completed);
-            }
-            return task;
-          },
-        ).toList();
-        emit(ToDoLoaded(updatedTasks));
+        final index = tasks.indexWhere(
+          (task) =>
+              task.title == event.task.title &&
+              task.description == event.task.description,
+        );
+        if (index != -1) {
+          tasks[index] =
+              tasks[index].copyWith(completed: !tasks[index].completed);
+        }
+        emit(ToDoLoaded(List.from(tasks)));
       },
     );
+    on<ScheduleReminder>((event, emit) async {
+  await ScheduleReminder(event.reminderDateTime, event.title);
+});
+
   }
 }

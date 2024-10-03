@@ -19,7 +19,7 @@ class ToDoAdapter extends TypeAdapter<ToDo> {
     return ToDo(
       title: fields[0] as String,
       completed: fields[1] as bool,
-      priority: fields[2] as Priority,
+      priority: fields[2] as Prioritys,
       description: fields[3] as String,
       dueDate: fields[4] as DateTime,
       reminder: fields[5] as DateTime?,

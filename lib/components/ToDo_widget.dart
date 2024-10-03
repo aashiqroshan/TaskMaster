@@ -11,6 +11,22 @@ class TodoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color containerColor;
+    String priorLevel;
+    switch (task.priority) {
+      case Prioritys.normal:
+        containerColor = Colors.yellow;
+        priorLevel = 'Normal';
+        break;
+      case Prioritys.important:
+        containerColor = Colors.orange;
+        priorLevel = 'Important';
+        break;
+      case Prioritys.veryImportant:
+        containerColor = Colors.redAccent;
+        priorLevel = 'Very Important';
+        break;
+    }
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -18,10 +34,7 @@ class TodoWidget extends StatelessWidget {
           margin: const EdgeInsets.all(8),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-              color: task.priority == Priority.veryImportant
-                  ? Colors.redAccent
-                  : Colors.blueAccent,
-              borderRadius: BorderRadius.circular(8)),
+              color: containerColor, borderRadius: BorderRadius.circular(8)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -77,6 +90,10 @@ class TodoWidget extends StatelessWidget {
                       },
                       icon: const Icon(Icons.delete))
                 ],
+              ),
+              Text(
+                'Priority Level : $priorLevel',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               )
             ],
           )),

@@ -31,6 +31,16 @@ class SearchTasks extends ToDoEvent {
 
 class UpdateTaskCompletion extends ToDoEvent {
   final ToDo task;
-  final bool completed;
-  UpdateTaskCompletion(this.task,this.completed);
+  final bool newValue;
+  UpdateTaskCompletion(this.task, this.newValue);
+
+  @override
+  List<Object> get props => [task, newValue];
+}
+
+class ScheduleReminder extends ToDoEvent {
+  final DateTime reminderDateTime;
+  final String title;
+
+  ScheduleReminder(this.reminderDateTime,this.title);
 }
